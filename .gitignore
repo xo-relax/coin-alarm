@@ -1,0 +1,8 @@
+postgresql/*
+core/venv/*
+__pycache__
+*.swp
+*.swa
+*.pyc
+web/migrations/*
+web/models.py

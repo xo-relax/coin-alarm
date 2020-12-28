@@ -1,0 +1,46 @@
+version: '2.3'
+
+networks:
+  bridge_net:
+    driver: bridge
+    name: ${DOCKER_NAME}_net
+
+services:
+  postgres:
+    container_name: coin_alarm-db
+    restart: always
+    image: postgres:12.3
+    networks:
+      - bridge_net
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./postgresql/data/:/var/lib/postgresql/data/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  
+  core:
+    container_name: coin_alarm-core
+    restart: always
+    image: coin_alarm_core:base
+    networks:
+      - bridge_net
+    volumes:
+      - $PWD/core:/usr/src/apps/core
+      - $PWD/common:/usr/src/common
+    environment:
+      - PYTHONPATH=/usr/src
+      - PYTHONUNBUFFERED=0
+    env_file:
+      - $PWD/.env
+    depends_on:
+      - postgres
+    working_dir: /usr/src/apps/core
+    command: sh -c "python main.py"

@@ -1,0 +1,5 @@
+upbitpy
+python-dotenv==0.10.1
+psycopg2-binary
+SQLAlchemy==1.3.22
+slackclient
