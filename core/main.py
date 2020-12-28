@@ -98,5 +98,5 @@ class CoreWorker:
 if __name__ == '__main__':
     core_worker = CoreWorker(
         timer=60,
-        ratio_threshold=0.1)
+        ratio_threshold=0.05)
     core_worker.run()
